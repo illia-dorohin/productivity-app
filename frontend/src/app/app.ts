@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from './core/auth/auth.service';
 
@@ -8,16 +8,12 @@ import { AuthService } from './core/auth/auth.service';
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })
-export class App implements OnInit {
+export class App {
   private readonly authService = inject(AuthService);
 
   readonly isAuthenticated = this.authService.isAuthenticated;
   readonly isLoading = this.authService.isLoading;
   readonly user = this.authService.currentUser;
-
-  ngOnInit(): void {
-    this.authService.loadProfile();
-  }
 
   logout(): void {
     this.authService.logout();
