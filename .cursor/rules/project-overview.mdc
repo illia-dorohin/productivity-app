@@ -1,0 +1,35 @@
+---
+description: Core project context — read before any task
+alwaysApply: true
+---
+
+# Productivity App — Project Overview
+
+Personal daily productivity tracker with ratings (1-5), hierarchical metric groups, weekly/monthly reports, tasks, and notes.
+
+## Context Files (read before starting work)
+
+All project documentation lives in `ai-context/`:
+
+| File | Read when... |
+|------|-------------|
+| `ai-context/app-concept.md` | Understanding features, rating hierarchy, product decisions |
+| `ai-context/project-structure.md` | Creating new files/modules, understanding folder layout |
+| `ai-context/tech-stack.md` | Choosing libraries, understanding stack decisions |
+| `ai-context/data-model.md` | Working with DB schemas, writing queries, aggregation |
+| `ai-context/api-design.md` | Creating/modifying API endpoints, writing HTTP services |
+| `ai-context/design-system.md` | Styling, colors, spacing, glass effects, responsive layout |
+
+## Quick Reference
+
+- **Frontend**: Angular 21, standalone components, signals, lazy-loaded routes
+- **Backend**: NestJS, Mongoose, JWT auth (Google OAuth)
+- **Database**: MongoDB (Atlas)
+- **Deploy**: Docker + Railway
+
+## Rules
+
+- All code and UI text in English
+- `ai-context/` files can be in Ukrainian — they are not deployed
+- Read relevant context files before making changes
+- Keep bundle size in check — avoid heavy libraries

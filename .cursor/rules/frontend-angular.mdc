@@ -1,0 +1,36 @@
+---
+description: Angular frontend conventions
+globs: frontend/**/*.ts,frontend/**/*.html,frontend/**/*.scss
+alwaysApply: false
+---
+
+# Angular Frontend Rules
+
+Read `ai-context/tech-stack.md` and `ai-context/project-structure.md` for full context.
+
+## Architecture
+
+- Standalone components only (no NgModules for features)
+- Feature routes are lazy-loaded in `app.routes.ts`
+- State management via Angular Signals (avoid RxJS where signals work)
+- Services in `core/api/` handle all HTTP calls
+
+## File Structure
+
+- Feature code goes in `frontend/src/app/features/<feature-name>/`
+- Shared UI components go in `frontend/src/app/shared/`
+- TypeScript interfaces go in `frontend/src/app/core/models/`
+- API services go in `frontend/src/app/core/api/`
+
+## Styling
+
+- Mobile-first responsive design
+- SCSS with CSS variables for theming
+- No CSS frameworks — custom styles
+
+## Conventions
+
+- One component per file
+- Use `inject()` instead of constructor injection
+- Use `input()` / `output()` signal-based APIs for component I/O
+- Prefix HTTP service methods with the action: `getRatings()`, `updateTask()`, `deleteNote()`

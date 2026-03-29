@@ -1,0 +1,34 @@
+---
+description: Rules for ai-context documentation files
+globs: ai-context/**/*.md
+alwaysApply: false
+---
+
+# AI Context Documentation Rules
+
+The `ai-context/` folder contains project documentation for AI agents.
+
+## Purpose
+
+These files are the single source of truth for project decisions.
+These files are committed to git. They are not part of the app runtime — they exist as project documentation for AI agents.
+
+## Rules
+
+- Written in Ukrainian (exception to the English-only rule for code)
+- Keep files up to date when making architectural changes
+- When adding a new feature module, update `project-structure.md`
+- When adding/changing API endpoints, update `api-design.md`
+- When modifying DB schemas, update `data-model.md`
+- When adding new libraries, update `tech-stack.md`
+- When product requirements change, update `app-concept.md`
+
+## File Roles
+
+| File | Updates when... |
+|------|----------------|
+| `app-concept.md` | Features, hierarchy, or product decisions change |
+| `project-structure.md` | New modules, folders, or structure changes |
+| `tech-stack.md` | New libraries added or stack decisions change |
+| `data-model.md` | MongoDB schemas, indexes, or aggregation logic changes |
+| `api-design.md` | API endpoints, request/response contracts change |

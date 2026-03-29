@@ -1,0 +1,41 @@
+---
+description: NestJS backend conventions
+globs: backend/src/**/*.ts
+alwaysApply: false
+---
+
+# NestJS Backend Rules
+
+Read `ai-context/data-model.md` and `ai-context/api-design.md` for full context.
+
+## Module Structure
+
+Each feature module is self-contained:
+```
+backend/src/<module>/
+  ├── <module>.controller.ts
+  ├── <module>.service.ts
+  ├── <module>.module.ts
+  ├── schemas/          # Mongoose schemas
+  └── dto/              # Request/response DTOs
+```
+
+## Conventions
+
+- Validate all input via DTOs with `class-validator` decorators
+- Use Mongoose schemas with `@Schema()` / `@Prop()` decorators
+- All endpoints (except auth) require `@UseGuards(JwtAuthGuard)`
+- Return consistent response shape: `{ data, message? }`
+- Use MongoDB aggregation pipelines for reports (not app-level loops)
+
+## Auth Flow
+
+1. User hits `GET /api/auth/google` → redirect to Google
+2. Google callback → validate, upsert user, return JWT
+3. All subsequent requests use `Authorization: Bearer <jwt>`
+
+## Error Handling
+
+- Use NestJS built-in exception filters
+- Throw `NotFoundException`, `BadRequestException`, etc.
+- Never expose internal error details to client

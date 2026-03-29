@@ -1,0 +1,36 @@
+---
+description: Design system rules — liquid glass style
+globs: frontend/**/*.scss,frontend/**/*.html,frontend/**/*.ts
+alwaysApply: false
+---
+
+# Design System — Liquid Glass
+
+Read `ai-context/design-system.md` for full tokens, colors, and mixins.
+
+## Core Principles
+
+- **Glassmorphism**: use `backdrop-filter: blur()` for cards and surfaces
+- **Layered depth**: bg-base → glass cards → elements (no flat design)
+- **Apple-like**: rounded corners (16px cards, 8px buttons), layered shadows, generous spacing
+- **Mobile-first**: start with mobile layout, scale up via `@include tablet` / `@include desktop`
+- **Dark mode**: all components must work in both modes
+
+## Must Follow
+
+- Use design tokens from `styles/_variables.scss` — never hardcode colors, spacing, or radii
+- Touch targets minimum 44x44px
+- Use `glass-card` mixin for all card surfaces
+- Use `glass-inset` mixin for input fields
+- Rating colors: `$rating-1` through `$rating-5` (red to green)
+- Transitions on all interactive elements (`$transition-fast` minimum)
+- Spacing follows 8px grid (`$space-2`, `$space-4`, `$space-6`, etc.)
+
+## Don'ts
+
+- No sharp corners (minimum `$radius-sm: 8px`)
+- No hard borders — use subtle `rgba()` borders or shadows
+- No heavy shadows — use layered, soft shadows
+- No instant state changes — always animate
+- No fixed pixel widths — use relative/fluid sizing
+- No CSS frameworks (Bootstrap, Tailwind, etc.)
