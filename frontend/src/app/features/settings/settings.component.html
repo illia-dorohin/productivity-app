@@ -1,0 +1,95 @@
+<h1 class="page-title">Settings</h1>
+
+@if (user(); as u) {
+  <div class="profile-card">
+    <img [src]="u.avatar" [alt]="u.name" class="profile-avatar" />
+    <div class="profile-info">
+      <span class="profile-name">{{ u.name }}</span>
+      <span class="profile-email">{{ u.email }}</span>
+    </div>
+    <button class="logout-btn" (click)="logout()">Sign Out</button>
+  </div>
+}
+
+<div class="section-header">
+  <h2>Metrics Hierarchy</h2>
+  <button class="add-btn" (click)="toggleForm()">
+    {{ showAddForm() ? 'Cancel' : '+ Add Metric' }}
+  </button>
+</div>
+
+@if (showAddForm()) {
+  <div class="metric-form">
+    <input
+      class="form-input"
+      [(ngModel)]="newName"
+      placeholder="Metric name"
+      (input)="generateSlug()"
+    />
+    <input
+      class="form-input"
+      [(ngModel)]="newSlug"
+      placeholder="Slug (auto-generated)"
+    />
+    <div class="form-row">
+      <select class="form-select" [(ngModel)]="newType">
+        <option value="rating">Rating (leaf)</option>
+        <option value="group">Group</option>
+      </select>
+      <select class="form-select" [(ngModel)]="newParentId">
+        <option value="">Top-level</option>
+        @for (g of flatGroups(); track g.id) {
+          <option [value]="g.id">{{ g.name }}</option>
+        }
+      </select>
+    </div>
+    <button class="submit-btn" (click)="addMetric()" [disabled]="!newName.trim() || !newSlug.trim()">
+      Add Metric
+    </button>
+  </div>
+}
+
+@if (loading()) {
+  <div class="loading"><div class="spinner"></div></div>
+} @else {
+  <div class="metrics-tree">
+    @for (group of metrics(); track group._id) {
+      <div class="tree-node root">
+        <div class="node-content">
+          <span class="node-type">{{ group.type === 'group' ? '📁' : '⭐' }}</span>
+          <span class="node-name">{{ group.name }}</span>
+          <span class="node-weight">×{{ group.weight }}</span>
+          <button class="node-delete" (click)="deleteMetric(group._id)" aria-label="Delete">×</button>
+        </div>
+        @if (group.children.length > 0) {
+          <div class="tree-children">
+            @for (child of group.children; track child._id) {
+              <div class="tree-node">
+                <div class="node-content">
+                  <span class="node-type">{{ child.type === 'group' ? '📁' : '⭐' }}</span>
+                  <span class="node-name">{{ child.name }}</span>
+                  <span class="node-weight">×{{ child.weight }}</span>
+                  <button class="node-delete" (click)="deleteMetric(child._id)" aria-label="Delete">×</button>
+                </div>
+                @if (child.children.length > 0) {
+                  <div class="tree-children">
+                    @for (leaf of child.children; track leaf._id) {
+                      <div class="tree-node">
+                        <div class="node-content">
+                          <span class="node-type">⭐</span>
+                          <span class="node-name">{{ leaf.name }}</span>
+                          <span class="node-weight">×{{ leaf.weight }}</span>
+                          <button class="node-delete" (click)="deleteMetric(leaf._id)" aria-label="Delete">×</button>
+                        </div>
+                      </div>
+                    }
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        }
+      </div>
+    }
+  </div>
+}

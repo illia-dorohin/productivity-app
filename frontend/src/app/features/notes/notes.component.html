@@ -1,0 +1,58 @@
+<div class="page-header">
+  <h1>Notes</h1>
+  <button class="add-btn" (click)="toggleForm()">
+    {{ showForm() ? 'Cancel' : '+ New Note' }}
+  </button>
+</div>
+
+@if (showForm()) {
+  <div class="note-form">
+    <textarea
+      class="form-input textarea"
+      [(ngModel)]="newText"
+      placeholder="Write your note..."
+      rows="4"
+    ></textarea>
+    <div class="form-row">
+      <input class="form-input" type="date" [(ngModel)]="newDate" />
+      <input
+        class="form-input"
+        [(ngModel)]="newTags"
+        placeholder="Tags (comma separated)"
+      />
+    </div>
+    <button class="submit-btn" (click)="createNote()" [disabled]="!newText.trim()">
+      Save Note
+    </button>
+  </div>
+}
+
+@if (loading()) {
+  <div class="loading"><div class="spinner"></div></div>
+} @else {
+  @if (notes().length === 0) {
+    <div class="empty-state">
+      <p>No notes yet</p>
+      <p class="empty-hint">Tap "+ New Note" to add your first note</p>
+    </div>
+  } @else {
+    <div class="notes-list">
+      @for (note of notes(); track note._id) {
+        <div class="note-card">
+          <div class="note-header">
+            <span class="note-date">{{ note.date | date:'MMM d, yyyy' }}</span>
+            <button class="delete-btn" (click)="deleteNote(note._id)" aria-label="Delete note">×</button>
+          </div>
+          <p class="note-text">{{ note.text }}</p>
+          @if (note.tags.length > 0) {
+            <div class="note-tags">
+              @for (tag of note.tags; track tag) {
+                <span class="tag">{{ tag }}</span>
+              }
+            </div>
+          }
+        </div>
+      }
+    </div>
+  }
+}

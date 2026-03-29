@@ -1,0 +1,89 @@
+<div class="page-header">
+  <h1>Reports</h1>
+  <div class="report-type-toggle">
+    <button
+      class="toggle-btn"
+      [class.active]="reportType() === 'weekly'"
+      (click)="setReportType('weekly')"
+    >Weekly</button>
+    <button
+      class="toggle-btn"
+      [class.active]="reportType() === 'monthly'"
+      (click)="setReportType('monthly')"
+    >Monthly</button>
+  </div>
+</div>
+
+<div class="period-nav">
+  @if (reportType() === 'weekly') {
+    <button class="nav-btn" (click)="navigateWeek(-1)">&larr;</button>
+    <span class="period-label">Week of {{ selectedDate() }}</span>
+    <button class="nav-btn" (click)="navigateWeek(1)">&rarr;</button>
+  } @else {
+    <button class="nav-btn" (click)="navigateMonth(-1)">&larr;</button>
+    <span class="period-label">{{ monthLabel() }}</span>
+    <button class="nav-btn" (click)="navigateMonth(1)">&rarr;</button>
+  }
+</div>
+
+@if (loading()) {
+  <div class="loading"><div class="spinner"></div></div>
+} @else if (report(); as r) {
+  <div class="overall-card">
+    <span class="overall-label">Overall Average</span>
+    @if (r.overall !== null) {
+      <span class="overall-value" [style.color]="getScoreColor(r.overall)">
+        {{ r.overall | number:'1.1-1' }}
+      </span>
+    } @else {
+      <span class="overall-value muted">—</span>
+    }
+    <span class="days-info">{{ r.daysWithData }} / {{ r.totalDays }} days</span>
+  </div>
+
+  <div class="section">
+    <h2 class="section-title">Groups</h2>
+    @for (group of r.groups; track group.metricId) {
+      <div class="score-row">
+        <div class="score-info">
+          <span class="score-name">{{ group.name }}</span>
+          <span class="score-value" [style.color]="getScoreColor(group.average)">
+            {{ group.count > 0 ? (group.average | number:'1.1-1') : '—' }}
+          </span>
+        </div>
+        @if (group.count > 0) {
+          <div class="score-bar">
+            <div
+              class="score-bar-fill"
+              [style.width]="getBarWidth(group.average)"
+              [style.background]="getScoreColor(group.average)"
+            ></div>
+          </div>
+        }
+      </div>
+    }
+  </div>
+
+  <div class="section">
+    <h2 class="section-title">Individual Metrics</h2>
+    @for (metric of r.metrics; track metric.metricId) {
+      <div class="score-row">
+        <div class="score-info">
+          <span class="score-name">{{ metric.name }}</span>
+          <span class="score-value" [style.color]="getScoreColor(metric.average)">
+            {{ metric.count > 0 ? (metric.average | number:'1.1-1') : '—' }}
+          </span>
+        </div>
+        @if (metric.count > 0) {
+          <div class="score-bar">
+            <div
+              class="score-bar-fill"
+              [style.width]="getBarWidth(metric.average)"
+              [style.background]="getScoreColor(metric.average)"
+            ></div>
+          </div>
+        }
+      </div>
+    }
+  </div>
+}

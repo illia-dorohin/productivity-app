@@ -1,0 +1,241 @@
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $space-5;
+
+  h1 {
+    font-size: $font-size-xl;
+    font-weight: $font-weight-semibold;
+  }
+}
+
+.add-btn {
+  padding: $space-2 $space-4;
+  background: $accent;
+  color: white;
+  border-radius: $radius-sm;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  @include press-effect;
+  min-height: 44px;
+}
+
+.task-form {
+  @include glass-card;
+  padding: $space-5;
+  margin-bottom: $space-5;
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+  @include fade-in;
+}
+
+.form-input {
+  @include glass-inset;
+  padding: $space-3 $space-4;
+  font-size: $font-size-base;
+  color: $text-primary;
+  outline: none;
+  width: 100%;
+  transition: box-shadow $transition-fast;
+
+  &:focus {
+    box-shadow: 0 0 0 2px $accent-light;
+  }
+
+  &.textarea {
+    resize: vertical;
+    min-height: 60px;
+  }
+}
+
+.form-row {
+  display: flex;
+  gap: $space-3;
+
+  > * { flex: 1; }
+}
+
+.form-select {
+  @include glass-inset;
+  padding: $space-3 $space-4;
+  font-size: $font-size-sm;
+  color: $text-primary;
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+}
+
+.submit-btn {
+  padding: $space-3 $space-5;
+  background: $accent;
+  color: white;
+  border-radius: $radius-sm;
+  font-size: $font-size-base;
+  font-weight: $font-weight-medium;
+  @include press-effect;
+  min-height: 44px;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  padding: $space-16;
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid $accent-light;
+  border-top-color: $accent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.empty-state {
+  text-align: center;
+  padding: $space-16 $space-5;
+  color: $text-secondary;
+
+  .empty-hint {
+    font-size: $font-size-sm;
+    color: $text-tertiary;
+    margin-top: $space-2;
+  }
+}
+
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+}
+
+.task-card {
+  @include glass-card;
+  padding: $space-4 $space-5;
+  display: flex;
+  align-items: flex-start;
+  gap: $space-3;
+  transition: opacity $transition-fast;
+  @include fade-in;
+
+  &.done {
+    opacity: 0.6;
+
+    .task-title {
+      text-decoration: line-through;
+      color: $text-tertiary;
+    }
+  }
+}
+
+.status-btn {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: $radius-full;
+  font-size: $font-size-base;
+  transition: all $transition-fast;
+  margin-top: 2px;
+  min-width: 44px;
+  min-height: 44px;
+
+  &.status-not_started {
+    color: $status-not-started;
+    @include glass-inset;
+  }
+
+  &.status-in_progress {
+    color: $status-in-progress;
+    background: $accent-light;
+  }
+
+  &.status-done {
+    color: white;
+    background: $status-done;
+  }
+}
+
+.task-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: $space-1;
+  min-width: 0;
+}
+
+.task-title {
+  font-size: $font-size-base;
+  font-weight: $font-weight-medium;
+}
+
+.task-desc {
+  font-size: $font-size-sm;
+  color: $text-secondary;
+}
+
+.task-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-2;
+  margin-top: $space-1;
+}
+
+.tag {
+  font-size: $font-size-xs;
+  padding: 2px $space-2;
+  border-radius: $radius-full;
+  @include glass-inset;
+  color: $text-secondary;
+
+  &.priority-high { color: $priority-high; background: rgba(255, 59, 48, 0.1); }
+  &.priority-medium { color: $priority-medium; background: rgba(255, 149, 0, 0.1); }
+  &.priority-low { color: $priority-low; }
+  &.deadline { color: $accent; }
+}
+
+.delete-btn {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: $radius-full;
+  font-size: $font-size-lg;
+  color: $text-tertiary;
+  transition: all $transition-fast;
+  min-width: 44px;
+  min-height: 44px;
+
+  &:hover {
+    color: $rating-1;
+    background: rgba(255, 59, 48, 0.08);
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .task-form { @include glass-card-dark; }
+  .task-card { @include glass-card-dark; }
+
+  .form-input, .form-select {
+    background: rgba(118, 118, 128, 0.18);
+    color: $text-primary-dark;
+  }
+}

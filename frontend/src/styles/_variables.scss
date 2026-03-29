@@ -1,0 +1,103 @@
+// Background layers (light mode)
+$bg-base: #f2f1f6;
+$bg-elevated: rgba(255, 255, 255, 0.72);
+$bg-overlay: rgba(255, 255, 255, 0.52);
+
+// Background layers (dark mode)
+$bg-base-dark: #1c1c1e;
+$bg-elevated-dark: rgba(44, 44, 46, 0.72);
+$bg-overlay-dark: rgba(44, 44, 46, 0.52);
+
+// Text
+$text-primary: #1d1d1f;
+$text-secondary: #6e6e73;
+$text-tertiary: #aeaeb2;
+$text-primary-dark: #f5f5f7;
+$text-secondary-dark: #98989d;
+
+// Accent
+$accent: #007aff;
+$accent-hover: #0056cc;
+$accent-light: rgba(0, 122, 255, 0.12);
+
+// Rating scale (1-5)
+$rating-1: #ff3b30;
+$rating-2: #ff9500;
+$rating-3: #ffcc00;
+$rating-4: #34c759;
+$rating-5: #30d158;
+
+// Status (tasks)
+$status-not-started: #8e8e93;
+$status-in-progress: #007aff;
+$status-done: #34c759;
+
+// Priority
+$priority-high: #ff3b30;
+$priority-medium: #ff9500;
+$priority-low: #8e8e93;
+
+// Metric group accents
+$group-productivity: #007aff;
+$group-brain-rot: #af52de;
+$group-health: #34c759;
+$group-mental-health: #5ac8fa;
+$group-relationships: #ff2d55;
+
+// Typography
+$font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text',
+  'Helvetica Neue', 'Segoe UI', system-ui, sans-serif;
+
+$font-size-xs: 12px;
+$font-size-sm: 14px;
+$font-size-base: 16px;
+$font-size-lg: 20px;
+$font-size-xl: 24px;
+$font-size-2xl: 34px;
+$font-size-3xl: 48px;
+
+$font-weight-regular: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+
+$line-height-tight: 1.2;
+$line-height-normal: 1.5;
+$line-height-relaxed: 1.7;
+
+// Spacing (8px grid)
+$space-1: 4px;
+$space-2: 8px;
+$space-3: 12px;
+$space-4: 16px;
+$space-5: 20px;
+$space-6: 24px;
+$space-8: 32px;
+$space-10: 40px;
+$space-12: 48px;
+$space-16: 64px;
+
+// Border radius
+$radius-sm: 8px;
+$radius-md: 12px;
+$radius-lg: 16px;
+$radius-xl: 20px;
+$radius-full: 9999px;
+
+// Shadows
+$shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04), 0 2px 8px rgba(0, 0, 0, 0.06);
+$shadow-md: 0 2px 8px rgba(0, 0, 0, 0.04), 0 8px 32px rgba(0, 0, 0, 0.08);
+$shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.06), 0 16px 48px rgba(0, 0, 0, 0.12);
+$shadow-glow: 0 4px 16px rgba(0, 122, 255, 0.3);
+
+// Transitions
+$transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+$transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+$transition-slow: 400ms cubic-bezier(0.4, 0, 0.2, 1);
+$transition-spring: 500ms cubic-bezier(0.34, 1.56, 0.64, 1);
+
+// Breakpoints
+$breakpoint-sm: 640px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 1024px;
+$breakpoint-xl: 1280px;

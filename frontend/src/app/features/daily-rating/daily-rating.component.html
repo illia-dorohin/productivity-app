@@ -1,0 +1,92 @@
+@if (loading()) {
+  <div class="loading">
+    <div class="spinner"></div>
+  </div>
+} @else {
+  <div class="page-header">
+    <div class="date-nav">
+      <button class="date-btn" (click)="changeDate(-1)" aria-label="Previous day">&larr;</button>
+      <h1 class="date-title">{{ displayDate() | date:'EEEE, MMM d' }}</h1>
+      <button class="date-btn" (click)="changeDate(1)" aria-label="Next day">&rarr;</button>
+    </div>
+    @if (saving()) {
+      <span class="save-indicator">Saving...</span>
+    }
+  </div>
+
+  @if (overallScore(); as score) {
+    <div class="overall-card">
+      <span class="overall-label">Overall Score</span>
+      <span class="overall-value" [style.color]="getScoreColor(score)">
+        {{ score | number:'1.1-1' }}
+      </span>
+    </div>
+  }
+
+  <div class="metrics-list">
+    @for (group of metrics(); track group._id) {
+      <div class="metric-group">
+        <div class="group-header">
+          <h2 class="group-name">{{ group.name }}</h2>
+          @if (getGroupAverage(group); as avg) {
+            <span class="group-avg" [style.color]="getScoreColor(avg)">
+              {{ avg | number:'1.1-1' }}
+            </span>
+          }
+        </div>
+
+        @if (group.type === 'rating') {
+          <div class="metric-item">
+            <app-rating-selector
+              [value]="scores().get(group._id) ?? 0"
+              [description]="group.description"
+              (valueChange)="onScoreChange(group._id, $event)"
+            />
+          </div>
+        } @else {
+          @for (child of group.children; track child._id) {
+            @if (child.type === 'rating') {
+              <div class="metric-item">
+                <div class="metric-label">
+                  <span>{{ child.name }}</span>
+                  @if (child.description) {
+                    <span class="metric-hint">{{ child.description }}</span>
+                  }
+                </div>
+                <app-rating-selector
+                  [value]="scores().get(child._id) ?? 0"
+                  (valueChange)="onScoreChange(child._id, $event)"
+                />
+              </div>
+            } @else {
+              <div class="sub-group">
+                <div class="sub-group-header">
+                  <span class="sub-group-name">{{ child.name }}</span>
+                  @if (getGroupAverage(child); as avg) {
+                    <span class="group-avg small" [style.color]="getScoreColor(avg)">
+                      {{ avg | number:'1.1-1' }}
+                    </span>
+                  }
+                </div>
+                @for (leaf of child.children; track leaf._id) {
+                  <div class="metric-item nested">
+                    <div class="metric-label">
+                      <span>{{ leaf.name }}</span>
+                      @if (leaf.description) {
+                        <span class="metric-hint">{{ leaf.description }}</span>
+                      }
+                    </div>
+                    <app-rating-selector
+                      [value]="scores().get(leaf._id) ?? 0"
+                      (valueChange)="onScoreChange(leaf._id, $event)"
+                    />
+                  </div>
+                }
+              </div>
+            }
+          }
+        }
+      </div>
+    }
+  </div>
+}

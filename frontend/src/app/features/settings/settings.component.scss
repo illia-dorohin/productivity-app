@@ -1,0 +1,226 @@
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
+
+.page-title {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-semibold;
+  margin-bottom: $space-6;
+}
+
+.profile-card {
+  @include glass-card;
+  padding: $space-5;
+  display: flex;
+  align-items: center;
+  gap: $space-4;
+  margin-bottom: $space-6;
+  @include fade-in;
+}
+
+.profile-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: $radius-full;
+}
+
+.profile-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.profile-name {
+  font-size: $font-size-base;
+  font-weight: $font-weight-semibold;
+}
+
+.profile-email {
+  font-size: $font-size-sm;
+  color: $text-secondary;
+}
+
+.logout-btn {
+  padding: $space-2 $space-4;
+  border-radius: $radius-sm;
+  font-size: $font-size-sm;
+  color: $rating-1;
+  @include glass-inset;
+  @include press-effect;
+  min-height: 44px;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $space-4;
+
+  h2 {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-semibold;
+  }
+}
+
+.add-btn {
+  padding: $space-2 $space-4;
+  background: $accent;
+  color: white;
+  border-radius: $radius-sm;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  @include press-effect;
+  min-height: 44px;
+}
+
+.metric-form {
+  @include glass-card;
+  padding: $space-5;
+  margin-bottom: $space-5;
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+  @include fade-in;
+}
+
+.form-input {
+  @include glass-inset;
+  padding: $space-3 $space-4;
+  font-size: $font-size-base;
+  color: $text-primary;
+  outline: none;
+  width: 100%;
+  transition: box-shadow $transition-fast;
+
+  &:focus {
+    box-shadow: 0 0 0 2px $accent-light;
+  }
+}
+
+.form-row {
+  display: flex;
+  gap: $space-3;
+  > * { flex: 1; }
+}
+
+.form-select {
+  @include glass-inset;
+  padding: $space-3 $space-4;
+  font-size: $font-size-sm;
+  color: $text-primary;
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+}
+
+.submit-btn {
+  padding: $space-3 $space-5;
+  background: $accent;
+  color: white;
+  border-radius: $radius-sm;
+  font-size: $font-size-base;
+  font-weight: $font-weight-medium;
+  @include press-effect;
+  min-height: 44px;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  padding: $space-16;
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid $accent-light;
+  border-top-color: $accent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.metrics-tree {
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+}
+
+.tree-node {
+  &.root {
+    @include glass-card;
+    padding: $space-3 $space-4;
+    margin-bottom: $space-2;
+  }
+}
+
+.node-content {
+  display: flex;
+  align-items: center;
+  gap: $space-3;
+  padding: $space-2 0;
+}
+
+.node-type {
+  font-size: $font-size-base;
+  flex-shrink: 0;
+}
+
+.node-name {
+  flex: 1;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+}
+
+.node-weight {
+  font-size: $font-size-xs;
+  color: $text-tertiary;
+}
+
+.node-delete {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: $radius-full;
+  font-size: $font-size-base;
+  color: $text-tertiary;
+  transition: all $transition-fast;
+  min-width: 44px;
+  min-height: 44px;
+
+  &:hover {
+    color: $rating-1;
+    background: rgba(255, 59, 48, 0.08);
+  }
+}
+
+.tree-children {
+  padding-left: $space-6;
+  border-left: 2px solid rgba(0, 0, 0, 0.04);
+  margin-left: $space-3;
+}
+
+@media (prefers-color-scheme: dark) {
+  .profile-card { @include glass-card-dark; }
+  .metric-form { @include glass-card-dark; }
+  .tree-node.root { @include glass-card-dark; }
+
+  .tree-children {
+    border-left-color: rgba(255, 255, 255, 0.06);
+  }
+
+  .form-input, .form-select {
+    background: rgba(118, 118, 128, 0.18);
+    color: $text-primary-dark;
+  }
+}

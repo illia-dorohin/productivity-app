@@ -1,0 +1,81 @@
+<div class="page-header">
+  <h1>Tasks</h1>
+  <button class="add-btn" (click)="toggleForm()">
+    {{ showForm() ? 'Cancel' : '+ New Task' }}
+  </button>
+</div>
+
+@if (showForm()) {
+  <div class="task-form">
+    <input
+      class="form-input"
+      [(ngModel)]="newTitle"
+      placeholder="Task title"
+      (keydown.enter)="createTask()"
+    />
+    <textarea
+      class="form-input textarea"
+      [(ngModel)]="newDescription"
+      placeholder="Description (optional)"
+      rows="2"
+    ></textarea>
+    <div class="form-row">
+      <select class="form-select" [(ngModel)]="newPriority">
+        <option value="">No priority</option>
+        <option value="high">High</option>
+        <option value="medium">Medium</option>
+        <option value="low">Low</option>
+      </select>
+      <input class="form-input" type="date" [(ngModel)]="newDeadline" />
+    </div>
+    <button class="submit-btn" (click)="createTask()" [disabled]="!newTitle.trim()">
+      Create Task
+    </button>
+  </div>
+}
+
+@if (loading()) {
+  <div class="loading"><div class="spinner"></div></div>
+} @else {
+  @if (tasks().length === 0) {
+    <div class="empty-state">
+      <p>No tasks yet</p>
+      <p class="empty-hint">Tap "+ New Task" to add your first task</p>
+    </div>
+  } @else {
+    <div class="task-list">
+      @for (task of tasks(); track task._id) {
+        <div class="task-card" [class.done]="task.status === 'done'">
+          <button
+            class="status-btn"
+            [class]="'status-' + task.status"
+            (click)="toggleStatus(task)"
+            [attr.aria-label]="'Toggle task: ' + task.title"
+          >
+            {{ getStatusIcon(task.status) }}
+          </button>
+          <div class="task-content">
+            <span class="task-title">{{ task.title }}</span>
+            @if (task.description) {
+              <span class="task-desc">{{ task.description }}</span>
+            }
+            <div class="task-meta">
+              @if (task.priority) {
+                <span class="tag" [class]="'priority-' + task.priority">
+                  {{ getPriorityLabel(task.priority) }}
+                </span>
+              }
+              @if (task.deadline) {
+                <span class="tag deadline">{{ task.deadline | date:'MMM d' }}</span>
+              }
+              @for (tag of task.tags; track tag) {
+                <span class="tag">{{ tag }}</span>
+              }
+            </div>
+          </div>
+          <button class="delete-btn" (click)="deleteTask(task._id)" aria-label="Delete task">×</button>
+        </div>
+      }
+    </div>
+  }
+}

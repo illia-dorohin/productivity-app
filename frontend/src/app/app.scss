@@ -1,0 +1,223 @@
+@use '../styles/variables' as *;
+@use '../styles/mixins' as *;
+
+.loading-screen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100dvh;
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid $accent-light;
+  border-top-color: $accent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.app-layout {
+  display: flex;
+  min-height: 100dvh;
+}
+
+// Sidebar (desktop)
+.sidebar {
+  display: none;
+  flex-direction: column;
+  width: 240px;
+  height: 100dvh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  padding: $space-5;
+  @include glass-subtle;
+  z-index: 100;
+
+  @include desktop {
+    display: flex;
+  }
+}
+
+.sidebar-header {
+  padding: $space-4 $space-3;
+  margin-bottom: $space-4;
+}
+
+.logo {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  color: $accent;
+}
+
+.nav-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: $space-1;
+  flex: 1;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: $space-3;
+  padding: $space-3 $space-4;
+  border-radius: $radius-sm;
+  color: $text-secondary;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  transition: all $transition-fast;
+  text-decoration: none;
+
+  &:hover {
+    background: $accent-light;
+    color: $text-primary;
+  }
+
+  &.active {
+    background: $accent-light;
+    color: $accent;
+  }
+}
+
+.nav-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.sidebar-footer {
+  padding-top: $space-4;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: $space-3;
+  padding: $space-2 0;
+}
+
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: $radius-full;
+}
+
+.user-name {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $text-primary;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.logout-btn {
+  width: 100%;
+  padding: $space-2 $space-4;
+  margin-top: $space-2;
+  font-size: $font-size-sm;
+  color: $text-secondary;
+  border-radius: $radius-sm;
+  transition: all $transition-fast;
+
+  &:hover {
+    background: rgba(255, 59, 48, 0.08);
+    color: $rating-1;
+  }
+}
+
+// Bottom nav (mobile)
+.bottom-nav {
+  display: flex;
+  justify-content: space-around;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: $space-2 0;
+  padding-bottom: max($space-2, env(safe-area-inset-bottom));
+  @include glass-subtle;
+  z-index: 100;
+
+  @include desktop {
+    display: none;
+  }
+}
+
+.bottom-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: $space-1 $space-3;
+  color: $text-tertiary;
+  font-size: 10px;
+  font-weight: $font-weight-medium;
+  text-decoration: none;
+  transition: color $transition-fast;
+  min-width: 44px;
+  min-height: 44px;
+  justify-content: center;
+
+  svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  &.active {
+    color: $accent;
+  }
+}
+
+// Main content
+.main-content {
+  flex: 1;
+  padding: $space-5;
+  padding-bottom: calc($space-5 + 72px);
+  max-width: 800px;
+  margin: 0 auto;
+  width: 100%;
+
+  @include desktop {
+    margin-left: 240px;
+    padding-bottom: $space-5;
+    max-width: 960px;
+  }
+}
+
+// Dark mode
+@media (prefers-color-scheme: dark) {
+  .sidebar {
+    background: rgba(44, 44, 46, 0.52);
+    border-right: 1px solid rgba(255, 255, 255, 0.06);
+
+    .nav-item {
+      color: $text-secondary-dark;
+
+      &:hover {
+        color: $text-primary-dark;
+      }
+    }
+
+    .user-name {
+      color: $text-primary-dark;
+    }
+  }
+
+  .sidebar-footer {
+    border-top-color: rgba(255, 255, 255, 0.06);
+  }
+
+  .bottom-nav {
+    background: rgba(44, 44, 46, 0.72);
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+  }
+}

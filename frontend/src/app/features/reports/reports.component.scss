@@ -1,0 +1,181 @@
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $space-5;
+  flex-wrap: wrap;
+  gap: $space-3;
+
+  h1 {
+    font-size: $font-size-xl;
+    font-weight: $font-weight-semibold;
+  }
+}
+
+.report-type-toggle {
+  display: flex;
+  @include glass-inset;
+  border-radius: $radius-sm;
+  padding: 2px;
+}
+
+.toggle-btn {
+  padding: $space-2 $space-4;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  border-radius: 6px;
+  color: $text-secondary;
+  transition: all $transition-fast;
+  min-height: 36px;
+
+  &.active {
+    background: white;
+    color: $accent;
+    box-shadow: $shadow-sm;
+  }
+}
+
+.period-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $space-4;
+  margin-bottom: $space-6;
+}
+
+.nav-btn {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  @include glass-inset;
+  border-radius: $radius-sm;
+  color: $accent;
+  @include press-effect;
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.period-label {
+  font-size: $font-size-base;
+  font-weight: $font-weight-medium;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  padding: $space-16;
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid $accent-light;
+  border-top-color: $accent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.overall-card {
+  @include glass-card;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: $space-6;
+  margin-bottom: $space-6;
+  @include fade-in;
+}
+
+.overall-label {
+  font-size: $font-size-sm;
+  color: $text-secondary;
+  margin-bottom: $space-2;
+}
+
+.overall-value {
+  font-size: $font-size-3xl;
+  font-weight: $font-weight-bold;
+
+  &.muted {
+    color: $text-tertiary;
+  }
+}
+
+.days-info {
+  font-size: $font-size-xs;
+  color: $text-tertiary;
+  margin-top: $space-2;
+}
+
+.section {
+  @include glass-card;
+  padding: $space-5;
+  margin-bottom: $space-5;
+  @include fade-in;
+}
+
+.section-title {
+  font-size: $font-size-base;
+  font-weight: $font-weight-semibold;
+  margin-bottom: $space-4;
+  color: $text-secondary;
+}
+
+.score-row {
+  padding: $space-3 0;
+
+  &:not(:last-child) {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+  }
+}
+
+.score-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $space-2;
+}
+
+.score-name {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+}
+
+.score-value {
+  font-size: $font-size-base;
+  font-weight: $font-weight-bold;
+}
+
+.score-bar {
+  height: 6px;
+  background: rgba(118, 118, 128, 0.08);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.score-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width $transition-normal;
+}
+
+@media (prefers-color-scheme: dark) {
+  .overall-card { @include glass-card-dark; }
+  .section { @include glass-card-dark; }
+
+  .toggle-btn.active {
+    background: rgba(255, 255, 255, 0.12);
+  }
+
+  .score-row:not(:last-child) {
+    border-bottom-color: rgba(255, 255, 255, 0.06);
+  }
+}
