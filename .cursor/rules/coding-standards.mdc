@@ -1,0 +1,76 @@
+---
+description: TypeScript coding standards — style, immutability, error handling
+globs: "**/*.ts"
+alwaysApply: false
+---
+
+# TypeScript Coding Standards
+
+## Immutability (CRITICAL)
+
+ALWAYS create new objects, NEVER mutate existing ones:
+
+```typescript
+// WRONG: mutation
+function updateUser(user: User, name: string): User {
+  user.name = name;
+  return user;
+}
+
+// CORRECT: immutable update
+function updateUser(user: Readonly<User>, name: string): User {
+  return { ...user, name };
+}
+```
+
+## Types and Interfaces
+
+- Add explicit types to exported functions, services, and public APIs
+- Let TypeScript infer obvious local variable types
+- Use `interface` for object shapes, `type` for unions/intersections/utilities
+- Prefer string literal unions over `enum`
+- NEVER use `any` — use `unknown` for untrusted input, then narrow
+
+```typescript
+// WRONG
+function getErrorMessage(error: any) { return error.message; }
+
+// CORRECT
+function getErrorMessage(error: unknown): string {
+  return error instanceof Error ? error.message : 'Unexpected error';
+}
+```
+
+## File Organization
+
+- 200-400 lines typical, 800 max
+- One component/service/controller per file
+- Organize by feature, not by type
+- Extract utilities from large modules
+
+## Error Handling
+
+- Handle errors explicitly at every level
+- Use async/await with try-catch
+- Log detailed context server-side, user-friendly messages client-side
+- Never silently swallow errors
+- No `console.log` in production — use proper logging
+
+## Input Validation
+
+- Validate all user input at system boundaries
+- Backend: use class-validator DTOs
+- Frontend: validate before API calls
+- Never trust external data
+
+## Code Quality Checklist
+
+Before marking work complete:
+- [ ] Functions are small (<50 lines)
+- [ ] Files are focused (<800 lines)
+- [ ] No deep nesting (>4 levels)
+- [ ] Proper error handling
+- [ ] No hardcoded values (use constants or config)
+- [ ] No mutation (immutable patterns used)
+- [ ] No `any` types
+- [ ] No `console.log`

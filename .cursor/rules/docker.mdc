@@ -1,0 +1,41 @@
+---
+description: Docker and Docker Compose conventions
+globs: "**/Dockerfile,**/docker-compose*.yml,**/.dockerignore"
+alwaysApply: false
+---
+
+# Docker Conventions
+
+## Dockerfile
+
+- Use multi-stage builds: `deps` → `dev` → `build` → `production`
+- Base image: `node:22-alpine`
+- Run as non-root user in production stage
+- Pin image tags (never `:latest`)
+- Add HEALTHCHECK in production stage
+- Keep `.dockerignore` updated
+
+## Docker Compose
+
+- `docker-compose.yml` — local dev (frontend + backend + mongo)
+- `docker-compose.prod.yml` — production overrides
+- Use `depends_on` with `condition: service_healthy` for MongoDB
+- Bind mount source code for hot reload in dev
+- Anonymous volume for `node_modules` to avoid host/container conflicts
+- Use `.env` file for secrets (gitignored)
+
+## Security
+
+- No secrets in Dockerfiles or compose files
+- `security_opt: no-new-privileges:true` in production
+- Drop all capabilities, add only needed ones
+- Read-only root filesystem where possible
+
+## Debugging
+
+```bash
+docker compose logs -f backend      # follow logs
+docker compose exec backend sh      # shell into container
+docker compose up --build            # rebuild
+docker compose down -v               # clean everything
+```

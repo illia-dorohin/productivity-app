@@ -27,9 +27,25 @@ All project documentation lives in `ai-context/`:
 - **Database**: MongoDB (Atlas)
 - **Deploy**: Docker + Railway
 
-## Rules
+## Rules Summary
+
+Other `.cursor/rules/` files provide detailed guidance:
+
+| Rule | Scope | Key Points |
+|------|-------|------------|
+| `coding-standards.mdc` | `**/*.ts` | Immutability, types, error handling, file size limits |
+| `frontend-angular.mdc` | `frontend/**` | Standalone components, signals, inject(), mobile-first |
+| `backend-nestjs.mdc` | `backend/src/**` | Module structure, DTOs, guards, aggregation |
+| `design-system.mdc` | `frontend/**` | Liquid Glass tokens, glass mixins, responsive breakpoints |
+| `security.mdc` | Always | No secrets, input validation, NoSQL injection prevention |
+| `git-workflow.mdc` | Always | Conventional commits, PR process |
+| `testing.mdc` | `**/*.ts` | Jest + Playwright, test priorities |
+| `docker.mdc` | Dockerfiles | Multi-stage builds, security, compose patterns |
+| `ai-context-docs.mdc` | `ai-context/**` | Keep docs updated when architecture changes |
+
+## General
 
 - All code and UI text in English
-- `ai-context/` files can be in Ukrainian — they are not deployed
+- `ai-context/` files can be in Ukrainian — project documentation, not runtime code
 - Read relevant context files before making changes
 - Keep bundle size in check — avoid heavy libraries

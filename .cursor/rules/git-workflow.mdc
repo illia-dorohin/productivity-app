@@ -1,0 +1,36 @@
+---
+description: Git commit and PR conventions
+alwaysApply: true
+---
+
+# Git Workflow
+
+## Commit Message Format
+
+```
+<type>: <description>
+
+<optional body>
+```
+
+Types: `feat`, `fix`, `refactor`, `docs`, `test`, `chore`, `perf`, `ci`
+
+Examples:
+- `feat: add weekly report aggregation endpoint`
+- `fix: handle missing scores in daily rating calculation`
+- `refactor: extract metric tree builder into service`
+
+## Development Workflow
+
+1. **Plan** — understand the task, read relevant `ai-context/` docs
+2. **Implement** — write code, follow coding standards
+3. **Test** — verify the change works
+4. **Review** — check code quality before committing
+5. **Commit** — conventional commit message
+
+## Pull Request Workflow
+
+1. Analyze full commit history (not just latest commit)
+2. Use `git diff main...HEAD` to see all changes
+3. Draft comprehensive PR summary
+4. Include test plan

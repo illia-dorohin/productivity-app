@@ -1,0 +1,40 @@
+---
+description: Security guidelines for NestJS + MongoDB stack
+alwaysApply: true
+---
+
+# Security Guidelines
+
+## Mandatory Security Checks
+
+Before ANY commit:
+- [ ] No hardcoded secrets (API keys, passwords, tokens)
+- [ ] All user inputs validated (class-validator DTOs on backend)
+- [ ] NoSQL injection prevention (no raw user input in MongoDB queries)
+- [ ] XSS prevention (sanitize output in templates)
+- [ ] CSRF protection enabled
+- [ ] Authentication/authorization verified on all endpoints
+- [ ] Rate limiting on public endpoints
+- [ ] Error messages don't leak internal details
+
+## Secret Management
+
+- NEVER hardcode secrets in source code
+- ALWAYS use environment variables
+- Validate required env vars at startup (NestJS ConfigModule)
+- `.env` files are gitignored
+
+```typescript
+// WRONG
+const secret = 'my-jwt-secret-key';
+
+// CORRECT
+const secret = process.env.JWT_SECRET;
+if (!secret) throw new Error('JWT_SECRET not configured');
+```
+
+## MongoDB-Specific
+
+- Never pass raw user input into query operators (`$where`, `$regex`, etc.)
+- Use Mongoose schema validation as second layer
+- Sanitize query parameters before building filters

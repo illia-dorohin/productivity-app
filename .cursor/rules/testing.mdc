@@ -1,0 +1,34 @@
+---
+description: Testing requirements and strategy
+globs: "**/*.spec.ts,**/*.test.ts,**/*.ts"
+alwaysApply: false
+---
+
+# Testing Requirements
+
+## Test Types
+
+1. **Unit Tests** — services, utilities, pipes, guards (Jest)
+2. **Integration Tests** — API endpoints, database operations (Jest + supertest)
+3. **E2E Tests** — critical user flows (Playwright)
+
+## Strategy
+
+- Backend: Jest for unit + integration tests
+- Frontend: Jest for unit tests of services/pipes, Playwright for E2E
+- Write tests for business logic, aggregation, and auth flows
+
+## Conventions
+
+- Test files live next to source: `ratings.service.ts` → `ratings.service.spec.ts`
+- Use descriptive test names: `it('should calculate weighted average ignoring missing scores')`
+- Mock external dependencies (DB, auth) in unit tests
+- Use real DB in integration tests (docker-compose test service)
+
+## What to Test (Priority)
+
+1. Rating aggregation logic (weighted averages, missing data handling)
+2. Auth flow (Google OAuth, JWT validation)
+3. CRUD operations for metrics, ratings, tasks, notes
+4. Report generation (weekly/monthly)
+5. Input validation (DTOs)
