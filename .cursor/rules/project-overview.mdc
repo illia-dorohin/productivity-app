@@ -41,7 +41,8 @@ Other `.cursor/rules/` files provide detailed guidance:
 | `git-workflow.mdc` | Always | Conventional commits, PR process |
 | `testing.mdc` | `**/*.ts` | Jest + Playwright, test priorities |
 | `docker.mdc` | Dockerfiles | Multi-stage builds, security, compose patterns |
-| `ai-context-docs.mdc` | `ai-context/**` | Keep docs updated when architecture changes |
+| `documentation.mdc` | Always | Keep `docs/` updated when implementing features |
+| `ai-context-docs.mdc` | `ai-context/**` | Keep AI context docs updated when architecture changes |
 
 ## General
 

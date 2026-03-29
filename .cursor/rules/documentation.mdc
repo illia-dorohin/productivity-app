@@ -1,0 +1,31 @@
+---
+description: Documentation requirements — keep docs/ updated
+alwaysApply: true
+---
+
+# Documentation Rules
+
+The `docs/` folder contains user-facing project documentation (in English).
+
+## When to Update
+
+After implementing or significantly changing:
+- **API endpoints** → update `docs/api.md` with endpoint, request/response examples
+- **Setup / env vars** → update `docs/setup.md`
+- **Architecture / modules** → update `docs/architecture.md`
+- **Deployment config** → update `docs/deployment.md`
+- **Rating/metric logic** → update `docs/metrics.md`
+
+## How to Write
+
+- Write for a developer (the project owner) — clear, concise, practical
+- Include code examples and command snippets where relevant
+- Keep each doc focused on one topic
+- Create new docs when a topic doesn't fit existing ones
+
+## Difference from ai-context/
+
+| Folder | Audience | Language | Purpose |
+|--------|----------|----------|---------|
+| `docs/` | Human (project owner) | English | How to use, deploy, understand the project |
+| `ai-context/` | AI agents | Ukrainian | Technical context for AI-assisted development |
