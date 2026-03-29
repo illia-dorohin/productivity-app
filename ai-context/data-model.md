@@ -22,7 +22,7 @@
   "userId": "ObjectId (ref: users)",
   "name": "string",
   "slug": "string (unique per user, e.g. 'computer-games')",
-  "description": "string (optional, e.g. '5 = didn't play at all')",
+  "description": "string (optional, e.g. '+2 = didn't play at all')",
   "parentId": "ObjectId | null (ref: metrics, null = top-level group)",
   "type": "enum: 'group' | 'rating'",
   "weight": "number (default: 1, used in weighted average)",
@@ -33,7 +33,7 @@
 }
 ```
 - `type: 'group'` — container, not rated directly, calculates average of children
-- `type: 'rating'` — leaf node, user gives 1-5 score
+- `type: 'rating'` — leaf node, user gives -2 to +2 score
 - `parentId: null` — top-level group (Productivity, Brain Rot, Health, etc.)
 - Deactivated metrics (`isActive: false`) are excluded from new ratings but historical data is preserved
 
@@ -46,7 +46,7 @@
   "scores": [
     {
       "metricId": "ObjectId (ref: metrics, only type: 'rating')",
-      "value": "number (1-5)"
+      "value": "number (-2 to +2)"
     }
   ],
   "createdAt": "Date",

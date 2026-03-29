@@ -7,7 +7,7 @@ export class Score {
   @Prop({ required: true, type: Types.ObjectId, ref: 'Metric' })
   metricId: Types.ObjectId;
 
-  @Prop({ required: true, min: 1, max: 5 })
+  @Prop({ required: true, min: -2, max: 2 })
   value: number;
 }
 

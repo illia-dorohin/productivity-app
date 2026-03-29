@@ -46,12 +46,12 @@ $accent-light:    rgba(0, 122, 255, 0.12);  // фон для виділення
 ### Semantic Colors
 
 ```scss
-// Rating scale (1-5)
-$rating-1:  #FF3B30;   // червоний — погано
-$rating-2:  #FF9500;   // помаранчевий — нижче середнього
-$rating-3:  #FFCC00;   // жовтий — середньо
-$rating-4:  #34C759;   // зелений — добре
-$rating-5:  #30D158;   // яскраво-зелений — відмінно
+// Rating scale (-2 to +2), mapped to levels 1-5 for CSS
+$rating-1:  #FF3B30;   // червоний — дуже погано (-2)
+$rating-2:  #FF9500;   // помаранчевий — погано (-1)
+$rating-3:  #FFCC00;   // жовтий — нейтрально (0)
+$rating-4:  #34C759;   // зелений — добре (+1)
+$rating-5:  #30D158;   // яскраво-зелений — відмінно (+2)
 
 // Status (tasks)
 $status-not-started:  #8E8E93;   // сірий
@@ -227,10 +227,11 @@ $transition-spring:  500ms cubic-bezier(0.34, 1.56, 0.64, 1);
 
 ## Компоненти — Design Tokens
 
-### Rating Selector (1-5)
-- 5 кнопок в ряд, pill-shaped
+### Rating Selector (-2 to +2)
+- 5 кнопок в ряд (-2, -1, 0, +1, +2), pill-shaped
 - Невибрані: `glass-inset` стиль
-- Вибрана: заповнена кольором відповідної оцінки (`$rating-1` ... `$rating-5`)
+- Вибрана: заповнена кольором відповідного рівня (`$rating-1` ... `$rating-5`, де рівень = value + 3)
+- Повторне натискання на вибрану оцінку — скидає вибір (toggle)
 - Плавна анімація переходу кольору
 - Touch target: мінімум 44x44px (Apple HIG)
 

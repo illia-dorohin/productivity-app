@@ -38,7 +38,7 @@
         @if (group.type === 'rating') {
           <div class="metric-item">
             <app-rating-selector
-              [value]="scores().get(group._id) ?? 0"
+              [value]="scores().get(group._id) ?? null"
               [description]="group.description"
               (valueChange)="onScoreChange(group._id, $event)"
             />
@@ -54,7 +54,7 @@
                   }
                 </div>
                 <app-rating-selector
-                  [value]="scores().get(child._id) ?? 0"
+                  [value]="scores().get(child._id) ?? null"
                   (valueChange)="onScoreChange(child._id, $event)"
                 />
               </div>
@@ -77,7 +77,7 @@
                       }
                     </div>
                     <app-rating-selector
-                      [value]="scores().get(leaf._id) ?? 0"
+                      [value]="scores().get(leaf._id) ?? null"
                       (valueChange)="onScoreChange(leaf._id, $event)"
                     />
                   </div>

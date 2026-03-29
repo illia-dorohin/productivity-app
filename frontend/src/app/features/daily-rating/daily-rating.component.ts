@@ -71,9 +71,13 @@ export class DailyRatingComponent implements OnInit {
     }
   }
 
-  onScoreChange(metricId: string, value: number): void {
+  onScoreChange(metricId: string, value: number | null): void {
     const updated = new Map(this.scores());
-    updated.set(metricId, value);
+    if (value === null) {
+      updated.delete(metricId);
+    } else {
+      updated.set(metricId, value);
+    }
     this.scores.set(updated);
     this.autoSave();
   }
@@ -91,13 +95,13 @@ export class DailyRatingComponent implements OnInit {
 
   getScoreColor(value: number | null): string {
     if (value === null) return '';
-    const rounded = Math.round(value);
+    const rounded = Math.max(-2, Math.min(2, Math.round(value)));
     const colors: Record<number, string> = {
-      1: '#FF3B30',
-      2: '#FF9500',
-      3: '#FFCC00',
-      4: '#34C759',
-      5: '#30D158',
+      [-2]: '#FF3B30',
+      [-1]: '#FF9500',
+      [0]: '#FFCC00',
+      [1]: '#34C759',
+      [2]: '#30D158',
     };
     return colors[rounded] ?? '';
   }

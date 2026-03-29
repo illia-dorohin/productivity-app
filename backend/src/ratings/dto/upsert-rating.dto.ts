@@ -13,8 +13,8 @@ export class ScoreDto {
   metricId: string;
 
   @IsNumber()
-  @Min(1)
-  @Max(5)
+  @Min(-2)
+  @Max(2)
   value: number;
 }
 

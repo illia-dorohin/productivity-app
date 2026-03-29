@@ -9,12 +9,12 @@ import { Component, input, output } from '@angular/core';
         <button
           class="rating-btn"
           [class.selected]="value() === n"
-          [class]="'rating-' + n"
+          [class]="'level-' + (n + 3)"
           [attr.aria-checked]="value() === n"
           role="radio"
           (click)="select(n)"
         >
-          {{ n }}
+          {{ n > 0 ? '+' + n : n }}
         </button>
       }
     </div>
@@ -45,11 +45,11 @@ import { Component, input, output } from '@angular/core';
         transform: scale(1.05);
       }
 
-      &.selected.rating-1 { background: $rating-1; }
-      &.selected.rating-2 { background: $rating-2; }
-      &.selected.rating-3 { background: $rating-3; color: $text-primary; }
-      &.selected.rating-4 { background: $rating-4; }
-      &.selected.rating-5 { background: $rating-5; }
+      &.selected.level-1 { background: $rating-1; }
+      &.selected.level-2 { background: $rating-2; }
+      &.selected.level-3 { background: $rating-3; color: $text-primary; }
+      &.selected.level-4 { background: $rating-4; }
+      &.selected.level-5 { background: $rating-5; }
     }
 
     @media (prefers-color-scheme: dark) {
@@ -61,13 +61,13 @@ import { Component, input, output } from '@angular/core';
   `,
 })
 export class RatingSelectorComponent {
-  readonly value = input(0);
+  readonly value = input<number | null>(null);
   readonly description = input<string | undefined>();
-  readonly valueChange = output<number>();
+  readonly valueChange = output<number | null>();
 
-  readonly options = [1, 2, 3, 4, 5];
+  readonly options = [-2, -1, 0, 1, 2];
 
   select(n: number): void {
-    this.valueChange.emit(n);
+    this.valueChange.emit(this.value() === n ? null : n);
   }
 }

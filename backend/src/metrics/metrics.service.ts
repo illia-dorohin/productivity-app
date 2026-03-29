@@ -46,8 +46,8 @@ const DEFAULT_METRICS = [
     type: 'group' as const,
     order: 1,
     children: [
-      { name: 'Computer Games', slug: 'computer-games', type: 'rating' as const, order: 0, description: '5 = didn\'t play' },
-      { name: 'Other Destructive Activities', slug: 'other-destructive', type: 'rating' as const, order: 1, description: '5 = no time wasted' },
+      { name: 'Computer Games', slug: 'computer-games', type: 'rating' as const, order: 0, description: '+2 = didn\'t play' },
+      { name: 'Other Destructive Activities', slug: 'other-destructive', type: 'rating' as const, order: 1, description: '+2 = no time wasted' },
     ],
   },
   {

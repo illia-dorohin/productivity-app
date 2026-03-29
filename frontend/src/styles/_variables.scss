@@ -20,7 +20,7 @@ $accent: #007aff;
 $accent-hover: #0056cc;
 $accent-light: rgba(0, 122, 255, 0.12);
 
-// Rating scale (1-5)
+// Rating scale (-2 to +2), mapped to levels 1-5 for CSS
 $rating-1: #ff3b30;
 $rating-2: #ff9500;
 $rating-3: #ffcc00;
