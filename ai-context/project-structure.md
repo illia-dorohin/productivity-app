@@ -46,7 +46,10 @@ productivity-app/
 │   └── package.json
 │
 ├── docker-compose.yml         # Local development (frontend + backend + mongo)
-├── docker-compose.prod.yml    # Production build
+├── docker-compose.prod.yml    # Production (pulls images from Docker Hub)
+├── .github/
+│   └── workflows/
+│       └── deploy.yml         # CI/CD: build → Docker Hub → deploy on push to "prod"
 └── .cursor/rules/             # Cursor AI rules
 ```
 

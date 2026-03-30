@@ -45,8 +45,23 @@
 ## Deployment
 
 - **Docker** containers for both frontend and backend
-- **Railway** for hosting (EU region, Docker-first, $5 free credit/month)
-- **MongoDB Atlas** for database (separate, free tier)
+- **Docker Hub** — image registry (`productivity-backend`, `productivity-frontend`)
+- **GitHub Actions** — CI/CD pipeline triggered on push to `prod` branch
+- **VPS / Server** — runs `docker-compose.prod.yml` pulling images from Docker Hub
+- **MongoDB Atlas** for database (free tier, AWS EU)
+
+### Environments
+
+| Environment | Branch | Database |
+|-------------|--------|----------|
+| Local dev | `main` | Local MongoDB (Docker) |
+| Production | `prod` | MongoDB Atlas |
+
+No staging/test environments.
+
+### CI/CD Flow
+
+`push to "prod"` → GitHub Actions builds images → pushes to Docker Hub → SSHs into server → `docker compose pull` + `up -d`
 
 ## Development
 
