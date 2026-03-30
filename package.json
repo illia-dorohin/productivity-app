@@ -1,0 +1,27 @@
+{
+  "name": "productivity-app",
+  "private": true,
+  "description": "Personal daily productivity tracker",
+  "scripts": {
+    "dev": "docker compose up",
+    "dev:build": "docker compose up --build",
+    "dev:down": "docker compose down",
+    "dev:clean": "docker compose down -v",
+
+    "docker:build": "npm run docker:build:backend && npm run docker:build:frontend",
+    "docker:build:backend": "docker build --platform linux/amd64 -t $npm_package_config_dockerhub_username/productivity-backend:latest --target production ./backend",
+    "docker:build:frontend": "docker build --platform linux/amd64 -t $npm_package_config_dockerhub_username/productivity-frontend:latest --target production ./frontend",
+
+    "docker:push": "npm run docker:push:backend && npm run docker:push:frontend",
+    "docker:push:backend": "docker push $npm_package_config_dockerhub_username/productivity-backend:latest",
+    "docker:push:frontend": "docker push $npm_package_config_dockerhub_username/productivity-frontend:latest",
+
+    "docker:deploy": "npm run docker:build && npm run docker:push",
+
+    "logs:backend": "docker compose logs -f backend",
+    "logs:frontend": "docker compose logs -f frontend"
+  },
+  "config": {
+    "dockerhub_username": "illiadorohin"
+  }
+}

@@ -21,6 +21,8 @@ services:
     image: ${DOCKERHUB_USERNAME}/productivity-frontend:latest
     ports:
       - "80:80"
+    environment:
+      - BACKEND_URL=http://backend:3000
     depends_on:
       backend:
         condition: service_healthy
