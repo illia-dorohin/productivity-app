@@ -5,7 +5,7 @@
 ```
 ┌──────────────┐     push to "prod"     ┌──────────────────┐
 │    GitHub     │ ────────────────────▶  │  GitHub Actions   │
-│  repository   │                        │  (build & push)   │
+│  repository   │                        │  build & push     │
 └──────────────┘                        └────────┬─────────┘
                                                  │
                                     ┌────────────┼────────────┐
@@ -18,8 +18,8 @@
                                    │            │             │
                                    ▼            ▼             │
                               ┌──────────────────────┐        │
-                              │   Production Server  │◀───────┘
-                              │                      │  SSH deploy
+                              │      Railway         │◀───────┘
+                              │                      │ railway redeploy
                               │  ┌────────┐ ┌─────┐  │
                               │  │Backend │ │Front│  │
                               │  │ :3000  │ │ :80 │  │
@@ -36,7 +36,7 @@
 
 | Environment | Branch | Database | Purpose |
 |-------------|--------|----------|---------|
-| Local dev | `main` | Local MongoDB (Docker) | Development, testing |
+| Local dev | `main` | Local MongoDB (Docker) | Development |
 | Production | `prod` | MongoDB Atlas | Live application |
 
 No staging/test environments — local dev and prod only.
@@ -49,7 +49,7 @@ Pushing to the `prod` branch triggers the full pipeline automatically via GitHub
 
 1. **Build** — Docker images for backend and frontend are built in parallel (matrix strategy)
 2. **Push** — Images are pushed to Docker Hub with two tags: `latest` and the commit SHA
-3. **Deploy** — The workflow SSHs into the production server, pulls new images, and restarts containers
+3. **Deploy** — Railway CLI redeploys both services, pulling the new `latest` images
 
 ### Workflow File
 
@@ -67,14 +67,11 @@ Images are published to Docker Hub:
 ### Manual Push (if needed)
 
 ```bash
-# Login
 docker login
 
-# Build and push backend
 docker build -t <username>/productivity-backend:latest --target production ./backend
 docker push <username>/productivity-backend:latest
 
-# Build and push frontend
 docker build -t <username>/productivity-frontend:latest --target production ./frontend
 docker push <username>/productivity-frontend:latest
 ```
@@ -83,138 +80,124 @@ docker push <username>/productivity-frontend:latest
 
 Configure these in GitHub repository settings (Settings → Secrets and variables → Actions):
 
-| Secret | Description |
-|--------|-------------|
-| `DOCKERHUB_USERNAME` | Docker Hub username |
-| `DOCKERHUB_TOKEN` | Docker Hub access token ([create here](https://hub.docker.com/settings/security)) |
-| `DEPLOY_HOST` | Production server IP or hostname |
-| `DEPLOY_USER` | SSH username on the server |
-| `DEPLOY_SSH_KEY` | Private SSH key for server access |
+| Secret | Description | Where to get |
+|--------|-------------|--------------|
+| `DOCKERHUB_USERNAME` | Docker Hub username | [hub.docker.com](https://hub.docker.com) |
+| `DOCKERHUB_TOKEN` | Docker Hub access token | [Docker Hub Security Settings](https://hub.docker.com/settings/security) |
+| `RAILWAY_TOKEN` | Railway project token | Railway Dashboard → Project → Settings → Tokens |
 
-## Production Server Setup
+## Railway Setup
 
-### First-Time Setup
+### Initial Setup
 
-1. Install Docker and Docker Compose on the server
-2. Create the app directory and environment file:
+1. Create a project at [railway.app](https://railway.app)
+2. Create two services — **backend** and **frontend**
+3. For each service, set source to **Docker Image**:
+   - Backend: `<dockerhub-username>/productivity-backend:latest`
+   - Frontend: `<dockerhub-username>/productivity-frontend:latest`
 
-```bash
-mkdir -p ~/productivity-app
-cd ~/productivity-app
+### Backend Service
 
-# Create .env with production values
-cat > .env << 'EOF'
-GOOGLE_CLIENT_ID=your-google-client-id
-GOOGLE_CLIENT_SECRET=your-google-client-secret
-GOOGLE_CALLBACK_URL=https://your-domain.com/api/auth/google/callback
-JWT_SECRET=your-jwt-secret-32-chars-minimum
-MONGODB_URI=mongodb+srv://user:password@cluster.mongodb.net/productivity?retryWrites=true&w=majority
-FRONTEND_URL=https://your-domain.com
-PORT=3000
-DOCKERHUB_USERNAME=your-dockerhub-username
-EOF
-```
+Add environment variables in Railway Dashboard (service → Variables):
 
-3. Copy `docker-compose.prod.yml` to the server (the CI/CD pipeline does this automatically on deploy)
+| Variable | Value |
+|----------|-------|
+| `GOOGLE_CLIENT_ID` | Your Google OAuth client ID |
+| `GOOGLE_CLIENT_SECRET` | Your Google OAuth client secret |
+| `GOOGLE_CALLBACK_URL` | `https://<backend-domain>/api/auth/google/callback` |
+| `JWT_SECRET` | Random string, 32+ characters |
+| `MONGODB_URI` | MongoDB Atlas connection string |
+| `FRONTEND_URL` | Your Railway frontend URL |
+| `PORT` | `3000` |
 
-4. Start services:
+### Frontend Service
 
-```bash
-docker compose -f docker-compose.prod.yml pull
-docker compose -f docker-compose.prod.yml up -d
-```
+No environment variables needed — the API URL is configured via nginx proxy.
 
-### SSH Key Setup
+### Railway Token
 
-Generate a deploy key and add it to the server:
+Generate a project token for CI/CD:
 
-```bash
-# On your local machine
-ssh-keygen -t ed25519 -C "github-deploy" -f ~/.ssh/deploy_key
+1. Open your project in Railway Dashboard
+2. Go to **Settings → Tokens**
+3. Create a new **Project Token**
+4. Copy it and add as `RAILWAY_TOKEN` in GitHub Secrets
 
-# Copy the public key to the server
-ssh-copy-id -i ~/.ssh/deploy_key.pub user@your-server
+### Service Names
 
-# Add the PRIVATE key content as DEPLOY_SSH_KEY in GitHub Secrets
-cat ~/.ssh/deploy_key
-```
+The GitHub Actions workflow uses `--service backend` and `--service frontend` in the `railway redeploy` commands. Make sure your Railway service names match exactly (lowercase). You can rename services in Railway Dashboard.
+
+### Custom Domain (Optional)
+
+1. In Railway service settings, go to **Networking**
+2. Add your custom domain
+3. Railway provides a CNAME record to add to your DNS
 
 ## MongoDB Atlas Setup
 
 1. Create a free account at [mongodb.com/atlas](https://www.mongodb.com/atlas)
 2. Create a cluster (Free Tier M0, AWS EU Frankfurt/Ireland)
 3. Create a database user with read/write access
-4. Add `0.0.0.0/0` to the IP Access List (required for external access)
+4. Add `0.0.0.0/0` to the IP Access List (required for Railway)
 5. Get the connection string and use it as `MONGODB_URI`
 
-## Production Compose
+## Local Production Testing
 
-The `docker-compose.prod.yml` file pulls pre-built images from Docker Hub instead of building locally. It uses the `DOCKERHUB_USERNAME` environment variable to resolve image names.
-
-Features:
-- `no-new-privileges` security option
-- `restart: unless-stopped` policy
-- Health checks on both services
-- Frontend waits for backend to be healthy before starting
-
-## Rollback
-
-To roll back to a previous version, use the commit SHA tag:
+Use `docker-compose.prod.yml` to test the production build locally:
 
 ```bash
-# On the production server
-cd ~/productivity-app
-
-# Set the specific version
-export IMAGE_TAG=abc123def456
-
-# Update compose to use specific tag and restart
-DOCKERHUB_USERNAME=$DOCKERHUB_USERNAME \
+export DOCKERHUB_USERNAME=your-username
 docker compose -f docker-compose.prod.yml pull
 docker compose -f docker-compose.prod.yml up -d
 ```
 
-Or edit `docker-compose.prod.yml` to pin a specific image tag instead of `latest`.
+## Rollback
 
-## Environment Variables Checklist
+To roll back to a previous version, update the Docker image tag in Railway:
 
-| Variable | Required | Where to Set |
-|----------|----------|--------------|
-| `GOOGLE_CLIENT_ID` | Yes | Server `.env` |
-| `GOOGLE_CLIENT_SECRET` | Yes | Server `.env` |
-| `GOOGLE_CALLBACK_URL` | Yes | Server `.env` |
-| `JWT_SECRET` | Yes | Server `.env` |
-| `MONGODB_URI` | Yes | Server `.env` |
-| `FRONTEND_URL` | Yes | Server `.env` |
-| `PORT` | Yes | Server `.env` |
-| `DOCKERHUB_USERNAME` | Yes | Server `.env` + GitHub Secrets |
+1. Go to Railway Dashboard → Service → Settings → Source
+2. Change the image tag from `latest` to the specific commit SHA
+3. Railway will redeploy with the old image
+
+Or via CLI:
+
+```bash
+# Install Railway CLI
+npm i -g @railway/cli
+
+# Login
+railway login
+
+# Link to project
+railway link
+
+# Redeploy (after changing image tag in dashboard)
+railway redeploy --service backend --yes
+railway redeploy --service frontend --yes
+```
 
 ## Health Checks
 
-Both containers include health checks:
+Both Docker images include health checks:
 - **Backend**: `wget http://localhost:3000/api/auth/me` (returns 401 if running)
 - **Frontend**: `wget http://localhost:80/` (returns 200 if nginx is up)
 
 ## Troubleshooting
 
 ```bash
-# Check container status
-docker compose -f docker-compose.prod.yml ps
+# Install Railway CLI
+npm i -g @railway/cli
 
-# Check container logs
-docker compose -f docker-compose.prod.yml logs -f backend
-docker compose -f docker-compose.prod.yml logs -f frontend
+# Login interactively
+railway login
 
-# Shell into running container
-docker compose -f docker-compose.prod.yml exec backend sh
+# Link to your project
+railway link
 
-# Restart a specific service
-docker compose -f docker-compose.prod.yml restart backend
+# View logs
+railway logs --service backend
+railway logs --service frontend
 
-# Full restart
-docker compose -f docker-compose.prod.yml down
-docker compose -f docker-compose.prod.yml up -d
-
-# Clean up old images
-docker image prune -f
+# Redeploy manually
+railway redeploy --service backend --yes
 ```

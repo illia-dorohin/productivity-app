@@ -47,7 +47,7 @@
 - **Docker** containers for both frontend and backend
 - **Docker Hub** — image registry (`productivity-backend`, `productivity-frontend`)
 - **GitHub Actions** — CI/CD pipeline triggered on push to `prod` branch
-- **VPS / Server** — runs `docker-compose.prod.yml` pulling images from Docker Hub
+- **Railway** — hosting (pulls Docker Hub images, manages containers)
 - **MongoDB Atlas** for database (free tier, AWS EU)
 
 ### Environments
@@ -61,7 +61,7 @@ No staging/test environments.
 
 ### CI/CD Flow
 
-`push to "prod"` → GitHub Actions builds images → pushes to Docker Hub → SSHs into server → `docker compose pull` + `up -d`
+`push to "prod"` → GitHub Actions builds images → pushes to Docker Hub → Railway CLI `redeploy` → Railway pulls new images
 
 ## Development
 

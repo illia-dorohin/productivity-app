@@ -4,10 +4,6 @@ on:
   push:
     branches: [prod]
 
-env:
-  BACKEND_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/productivity-backend
-  FRONTEND_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/productivity-frontend
-
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
@@ -16,10 +12,8 @@ jobs:
         include:
           - service: backend
             context: ./backend
-            image_env: BACKEND_IMAGE
           - service: frontend
             context: ./frontend
-            image_env: FRONTEND_IMAGE
     steps:
       - uses: actions/checkout@v4
 
@@ -45,29 +39,15 @@ jobs:
     needs: build-and-push
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Install Railway CLI
+        run: npm i -g @railway/cli
 
-      - name: Copy compose file to server
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.DEPLOY_HOST }}
-          username: ${{ secrets.DEPLOY_USER }}
-          key: ${{ secrets.DEPLOY_SSH_KEY }}
-          source: docker-compose.prod.yml
-          target: ~/productivity-app
-
-      - name: Deploy via SSH
-        uses: appleboy/ssh-action@v1.2.0
+      - name: Redeploy Backend
+        run: railway redeploy --service backend --yes
         env:
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-        with:
-          host: ${{ secrets.DEPLOY_HOST }}
-          username: ${{ secrets.DEPLOY_USER }}
-          key: ${{ secrets.DEPLOY_SSH_KEY }}
-          envs: DOCKERHUB_USERNAME
-          script: |
-            cd ~/productivity-app
-            export DOCKERHUB_USERNAME=$DOCKERHUB_USERNAME
-            docker compose -f docker-compose.prod.yml pull
-            docker compose -f docker-compose.prod.yml up -d --remove-orphans
-            docker image prune -f
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+
+      - name: Redeploy Frontend
+        run: railway redeploy --service frontend --yes
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
